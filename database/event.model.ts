@@ -110,7 +110,6 @@ const EventSchema = new Schema<IEvent>(
 );
 
 // Pre-save hook for slug generation and data normalization
-EventSchema.pre('save', function () {
 EventSchema.pre('save', async function () {
   const event = this as IEvent;
 
