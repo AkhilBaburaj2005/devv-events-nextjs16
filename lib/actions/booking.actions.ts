@@ -12,9 +12,7 @@ export const createBooking = async ({ eventId, slug, email }: { eventId: string,
     }
     if (!email || typeof email !== 'string' || !email.includes('@')) {
         return { success: false, error: 'Invalid email address' };
-    }
-
-    try {
+    } 
     try {
         await connectDB();
 
