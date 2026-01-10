@@ -3,6 +3,18 @@ import Booking from "@/database/booking.model";
 import connectDB from "@/lib/mongodb";
 
 export const createBooking = async ({ eventId, slug, email }: { eventId: string, slug: string, email: string }) => {
+    // Validate inputs
+    if (!eventId || typeof eventId !== 'string') {
+        return { success: false, error: 'Invalid event ID' };
+    }
+    if (!slug || typeof slug !== 'string') {
+        return { success: false, error: 'Invalid slug' };
+    }
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+        return { success: false, error: 'Invalid email address' };
+    }
+
+    try {
     try {
         await connectDB();
 
