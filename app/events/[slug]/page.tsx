@@ -36,8 +36,12 @@ const EventTags = ({ tags }: { tags: string[] }) => (
 
 const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`);
-    const { event: { description, image, overview, date, time, location, mode, agenda, tags, venue, audience, organizer } } = await request.json();
+
+    // Fetch with caching to avoid blocking route
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
+        next: { revalidate: 3600 } // Revalidate every hour
+    });
+    const { event: { _id, description, image, overview, date, time, location, mode, agenda, tags, venue, audience, organizer } } = await request.json();
 
     if (!description) return notFound();
 
@@ -45,7 +49,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
 
     const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
 
-    console.log({similarEvents});
+    console.log({ similarEvents });
 
     return (
         <section id="event">
@@ -92,7 +96,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                         ) : (
                             <p className="text-sm">Be the first to book your spot!</p>
                         )}
-                        <BookEvent />
+                        <BookEvent eventId={_id} slug={slug} />
                     </div>
                 </aside>
             </div>
