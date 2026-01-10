@@ -77,8 +77,8 @@ export async function POST(req: NextRequest) {
             mode: formData.get('mode') as string,
             audience: formData.get('audience') as string,
             organizer: formData.get('organizer') as string,
-            tags,
-            agenda,
+            tags: tags,
+            agenda: agenda,
             image: imageUrl,
         });
 
