@@ -8,7 +8,22 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const Page = async () => {
     'use cache';
     cacheLife('hours');
-    const response = await fetch(`${BASE_URL}/api/events`);
+
+    // Ensure BASE_URL has protocol
+    const baseUrl = BASE_URL?.startsWith('http') ? BASE_URL : `https://${BASE_URL}`;
+
+    const response = await fetch(`${baseUrl}/api/events`, {
+        next: { revalidate: 3600 }
+    });
+
+    if (!response.ok) {
+        return (
+            <section>
+                <h1 className="text-center">Unable to load events</h1>
+            </section>
+        );
+    }
+
     const { events } = await response.json();
 
     return (
@@ -23,7 +38,7 @@ const Page = async () => {
                 <ul className="events">
                     {events && events.length > 0 && events.map((event: IEvent) => (
                         <li key={event.title} className="list-none">
-                            <EventCard { ...event } />
+                            <EventCard {...event} />
                         </li>
                     ))}
                 </ul>

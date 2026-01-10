@@ -36,20 +36,24 @@ const EventTags = ({ tags }: { tags: string[] }) => (
 
 const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
+
+    // Ensure BASE_URL has protocol
+    const baseUrl = BASE_URL?.startsWith('http') ? BASE_URL : `https://${BASE_URL}`;
+
     // Fetch with caching to avoid blocking route
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
+    const request = await fetch(`${baseUrl}/api/events/${slug}`, {
         next: { revalidate: 3600 } // Revalidate every hour
     });
-    
+
     if (!request.ok) {
         return notFound();
     }
-    
+
     const data = await request.json();
     if (!data?.event) {
         return notFound();
     }
-    
+
     const { event: { _id, description, image, overview, date, time, location, mode, agenda, tags, venue, audience, organizer } } = data;
 
     if (!description) return notFound();
