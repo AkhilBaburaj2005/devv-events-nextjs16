@@ -1,7 +1,8 @@
-import EventCard from "@/components/EventCard"
-import ExploreBtn from "@/components/ExploreBtn"
-import { IEvent } from "@/database"
+import EventCard from "@/components/EventCard";
+import ExploreBtn from "@/components/ExploreBtn";
+import { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
+import events from "@/lib/constants"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -10,21 +11,21 @@ const Page = async () => {
     cacheLife('hours');
 
     // Ensure BASE_URL has protocol
-    const baseUrl = BASE_URL?.startsWith('http') ? BASE_URL : `https://${BASE_URL}`;
+    // const baseUrl = BASE_URL?.startsWith('http') ? BASE_URL : `https://${BASE_URL}`;
 
-    const response = await fetch(`${baseUrl}/api/events`, {
-        next: { revalidate: 3600 }
-    });
+    // const response = await fetch(`${baseUrl}/api/events`, {
+    //     next: { revalidate: 3600 }
+    // });
 
-    if (!response.ok) {
-        return (
-            <section>
-                <h1 className="text-center">Unable to load events</h1>
-            </section>
-        );
-    }
+    // if (!response.ok) {
+    //     return (
+    //         <section>
+    //             <h1 className="text-center">Unable to load events</h1>
+    //         </section>
+    //     );
+    // }
 
-    const { events } = await response.json();
+    // const { events } = await response.json();
 
     return (
         <section>
